@@ -1,6 +1,5 @@
 # Skincare Analysis
 
----
 Many skincare products promise to address skincare concerns, from 
 hyperpigmentation to acne to anti-aging. However, if the product doesn't 
 contain the right ingredients that will have the desired effect on skin, no 
@@ -21,14 +20,28 @@ ingredients are as effective as many believe them to be.
 
 ## Web Scraping
 
----
-webscrape.py scrapes the Skincarisma website for ingredients lists, reviews, and 
+**webscrape.py** scrapes the Skincarisma website for ingredients lists, reviews, and 
 other data about skincare products using the Beautiful Soup library (as of Feb 
 2021), which creates the skincare_data.csv file.
 
-create_small_data.py can be used to create smaller files by randomly selecting 
+**create_small_data.py** can be used to create smaller files by randomly selecting 
 products from skincare_data.csv, which can be used for testing. This was used 
-to create small_skincare.csv and medium_skincare.csv.
+to create **small_skincare.csv** and **medium_skincare.csv**.
 
-skincare_id.csv attaches a product ID number to each product in skincare_data.csv.
+**skincare_id.csv** attaches a product ID number to each product in 
+**skincare_data.csv**.
 
+## Analysis
+
+**ingredients_and_reviews.py** impletements and executes functions that 
+analyzes skincare data to answer the question of whether products with certain 
+ingredients more likely to be well-reviewed by users.
+
+**similar_ing_and_ratings.py** analyzes skincare data to answer the question of 
+how accurately are we able to predict popularity/likeability of a product based 
+on its traits.
+
+**traits_and_popularity.py** analyzes skincare data to answer the question of 
+whether if products with similar ingredients have similar ratings.
+
+**test.py** tests the functions in the previous three files.
