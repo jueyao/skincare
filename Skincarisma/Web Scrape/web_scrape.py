@@ -107,7 +107,7 @@ def long_list_of_urls(url):
 def make_category_df(urls):
     """
     Returns a pandas dataframe containing the product info and ingredients
-    of all products in a given list of URLs of products' ingredeints pages
+    of all products in a given list of URLs of products' ingredients pages
     on the Skincarisma website. Dataframe is in tidy format.
     """
     category_df = pd.DataFrame()
