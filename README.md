@@ -18,30 +18,31 @@ effects of these popular ingredients. It will help affirm (or not) these beliefs
 that the ingredients of skincare products matter the most, and whether popular 
 ingredients are as effective as many believe them to be.
 
-## Web Scraping
+## Installation
 
-**webscrape.py** scrapes the Skincarisma website for ingredients lists, reviews, and 
-other data about skincare products using the Beautiful Soup library (as of Feb 
-2021), which creates the skincare_data.csv file.
+1. Clone this repository to your computer
+2. Navigate to the project directory `cd skincare` from your terminal
+3. Install the requirements using `pip install -r requirements`
+    * The python version is Python 3.8
+    * You may want to use a virtual environment for this
 
-**create_small_data.py** can be used to create smaller files by randomly selecting 
-products from skincare_data.csv, which can be used for testing. This was used 
-to create **small_skincare.csv** and **medium_skincare.csv**.
 
-**skincare_id.csv** attaches a product ID number to each product in 
-**skincare_data.csv**.
+## Usage 
 
-## Analysis
+### Web Scraping
 
-**ingredients_and_reviews.py** impletements and executes functions that 
-analyzes skincare data to answer the question of whether products with certain 
-ingredients more likely to be well-reviewed by users.
+**web_scrape.py** scrapes the Soko Glam website for product info, ratings, 
+and ingredients lists of skincare products using the Beautiful Soup library 
+(as of Feb 2022), which creates the sokoglam_data.csv file.
 
-**similar_ing_and_ratings.py** analyzes skincare data to answer the question of 
-how accurately are we able to predict popularity/likeability of a product based 
-on its traits.
+**test_scrape.py** tests the functions in the **sokoglam_scrape.py** file.
 
-**traits_and_popularity.py** analyzes skincare data to answer the question of 
-whether if products with similar ingredients have similar ratings.
+**sokoglam_data.csv** contains the raw data scraped from the Soko Glam website 
+in Feb 2022.
 
-**test.py** tests the functions in the previous three files.
+### Cleaning
+
+**clean.py** implements functions to clean the raw data scraped from the Soko 
+Gram website.
+
+**test_clean.py** tests the functions in the **clean.py** file.
