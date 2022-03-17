@@ -24,15 +24,7 @@ def test_clean_ingredients():
     print(df2.loc[df2['sku'] == 'COC-OTMC-17'].values[0])
     print(df2.loc[df2['sku'] == 'MF-BBAT-25'].values[0])
     print(df2.loc[df2['sku'] == 'JTC-WWB-33'].values[0])
-
-
-def test_find_incomp_ingred_lists(df):
-    """
-    Test the find_incomp_ingred_lists function
-    """
-    print('Testing find_incomp_ingred_lists():')
     
-
 
 def main():
     test_clean_ingredients()
