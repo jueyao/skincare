@@ -50,12 +50,15 @@ def get_product_info(soup):
 
     # some product pages are formatted differently
     ingredients = product_html.find(id='content2')
-    ingredients = ingredients.find(class_='tab-content--full')
-    if ingredients.p is not None:
-        ingredients = ingredients.p.text
-    else:
+    if ingredients is None:
+        ingredients = ''
+    else: 
+        ingredients = ingredients.find(class_='tab-content--full')
+        if ingredients.p is not None:
+            ingredients = ingredients.p.text
+        else:
     # ingredients = product_html.find(class_='tab-content--full').p.text
-        ingredients = ingredients.h4.next_sibling.strip()
+            ingredients = ingredients.h4.next_sibling.strip()
 
     product_info = [product_name, brand, price, rating, rating_count, sku, ingredients]
 
@@ -103,24 +106,46 @@ def make_category_df(urls):
 
 def get_catgories_dict():
     """
-    Returns a dictionary of categories for skincare for Soko Glam's menu.
-    The category names are keys, and the html extensions are the values
+    Returns a dictionary of subcategories for skincare for Soko Glam's menu.
+    The subcategory names are keys, and the html extensions are the values
     """
     page = requests.get('https://sokoglam.com/')
     soup = BeautifulSoup(page.content, 'html.parser')
     menu_soup = soup.find(class_='subnav__right')
-    categories = menu_soup.find_all(class_='subnav__item')
+    categories = menu_soup.find_all(class_='subnav__child-item')
     category_dict = dict()
 
     for category in categories:
-        name = category.a.text
+        name = category.a.text.strip()
         url_ext = category.a.get('href')
         category_dict[name] = url_ext
 
     return category_dict
 
 
-def make_data_file(categories, dictionary):
+def add_category(df):
+    """
+    Adds a category column to the given dataframe using the subcategories and 
+    returns the new df
+    """
+    categories = {
+        'Cleansing Balms': 'Double-Cleanse', 'Oil Cleansers': 'Double-Cleanse', 
+        'Water Cleansers': 'Double-Cleanse', 
+        'Physical Exfoliators': 'Exfoliators', 
+        'Chemical Exfoliators': 'Exfoliators', 'Acid Toners': 'Toners', 
+        'Cleansing Toners': 'Toners', 'Hydrating Toners': 'Toners', 
+        'Essences': 'Treatments', 'Serums & Ampoules': 'Treatments', 
+        'Spot Treatment': 'Treatments', 'Sheet Masks': 'Masks', 
+        'Wash-off Masks': 'Masks', 'Sleeping Masks': 'Masks', 'Eye Cream': 
+        'Eye Care', 'Eye Masks': 'Eye Care', 
+        'Facial Moisturizer': 'Moisturizers', 
+        'Facial Mist & Oil': 'Moisturizers', 'Sunscreen': 'Sun Protection', 
+        'Makeup & SPF': 'Sun Protection'}
+    df['category'] = df['subcategory'].map(categories)
+    return df
+
+
+def make_data_file(dictionary):
     """
     Creates a pandas dataframe of product data for all the products in the
     desired categories on the Soko Glam website and saves it to a csv
@@ -129,8 +154,10 @@ def make_data_file(categories, dictionary):
     website_url = 'https://sokoglam.com/'
     big_df = pd.DataFrame()
 
-    for category in categories:
+    for category in dictionary.keys():
         category_url = website_url + dictionary[category]
+        if category == 'Facial Mist & Oil':  # Facial Mist & Oil already has https://sokoglam.com/ in given url
+            category_url = dictionary[category]
         product_urls = get_category_urls(category_url)
 
         category_df = make_category_df(product_urls)
@@ -139,17 +166,15 @@ def make_data_file(categories, dictionary):
         big_df = pd.concat([big_df, category_df], ignore_index=True)
     
     big_df.columns = ['product_name', 'brand', 'price', 'rating', 
-                      'rating_count', 'sku', 'ingredients', 'category']
+                      'rating_count', 'sku', 'ingredients', 'subcategory']
+    big_df = add_category(big_df)
 
-    big_df.to_csv('sokoglam_data.csv', index=False, header=True)
+    big_df.to_csv('skincare_data.csv', index=False, header=True)
 
 
 def main():
     url_dictionary = get_catgories_dict()
-    categories = ['Double-Cleanse', 'Exfoliators', 'Toners', 'Treatments', 
-                  'Masks', 'Eye Care', 'Moisturizers', 'Sun Protection']
-    
-    make_data_file(categories, url_dictionary)
+    make_data_file(url_dictionary)
 
 if __name__ == '__main__':
     main()
